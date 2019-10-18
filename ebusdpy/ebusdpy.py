@@ -1,11 +1,6 @@
 
 import socket
 
-class EBusError(Exception):
-    def __init__(self, message):
-        # Call the base class constructor with the parameters it needs
-        super().__init__(message)
-
 def init(address):
     try:
         """ Open the socket at the specified address, call the command sent and return data """
@@ -13,9 +8,9 @@ def init(address):
         sock.settimeout(5)
         sock.connect(address)
     except socket.timeout:
-        raise EBusError(socket.timeout)
+        raise socket.timeout(socket.timeout)
     except socket.error:
-        raise EBusError(socket.error)
+        raise socket.error(socket.error)
     finally:
         sock.close()
 
@@ -35,9 +30,9 @@ def read(address, circuit, name, type, ttl):
         if 'ERR:' not in decoded:
             result = humanize(type, decoded)
     except socket.timeout:
-        raise EBusError(socket.timeout)
+        raise RuntimeError(socket.timeout)
     except socket.error:
-        raise EBusError(socket.error)
+        raise RuntimeError(socket.error)
     finally:
         sock.close()
     return result
@@ -56,9 +51,9 @@ def write(address, circuit, name, value):
         """ Get the result decoded UTF-8 """
         result = sock.recv(256).decode('utf-8').rstrip()
     except socket.timeout:
-        raise EBusError(socket.timeout)
+        raise RuntimeError(socket.timeout)
     except socket.error:
-        raise EBusError(socket.error)
+        raise RuntimeError(socket.error)
     finally:
         sock.close()
     return result
