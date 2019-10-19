@@ -87,10 +87,14 @@ def humanize(type, value):
     elif type == 1:
         _state = value.replace(';-:-', '')
     elif type == 2:
-        if value == 1:
-            _state = 'on'
+        """ This can be a value [0;1] or string ['off';'on'] """
+        if isinstance(value, int):
+            if value == 1:
+                _state = 'on'
+            else:
+                _state = 'off'
         else:
-            _state = 'off'
+            _state = value
     elif type == 3:
         _state = value
     elif type == 4:
